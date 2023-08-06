@@ -23,8 +23,6 @@ preferenceRoutes.get('/', verifyToken, (req, res) => {
 });
 
 preferenceRoutes.post('/', verifyToken, (req, res) => {
-    console.log("req");
-    console.log(req);
     if (!req.user && req.message) {
         return res.status(403).send({
             message: req.message
@@ -35,12 +33,10 @@ preferenceRoutes.post('/', verifyToken, (req, res) => {
             message: "Invalid jwt token"
         });
     }
-    console.log(req.user.preferences);
     let result = req.user;
     if (result.length == 0) {
         return res.status(404).json({ "message": "Preferences does not exist." });
     }
-    console.log(req.body);
     let filter = { _id: req.user._id };
     let updatePref = {
         $set: { "preferences": req.body.preferences },
@@ -50,7 +46,6 @@ preferenceRoutes.post('/', verifyToken, (req, res) => {
             console.log(err);
         }
     });
-    console.log(result1.modifiedCount);
     return res.status(200).send("Preference updated successfully.");
 });
 

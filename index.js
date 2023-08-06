@@ -31,7 +31,7 @@ app.post('/signin', signin);
 
 app.use('/preferences', preferenceInfo);
 
-app.get('/news',newsInfo);
+app.use('/news',newsInfo);
 
 app.listen(PORT, (error) => {
     if(!error){

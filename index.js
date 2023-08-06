@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const routes = require('express').Router();
 const mongoose = require('mongoose');
 const {register, signin} = require('./src/controller/authController.js');
+const preferenceInfo = require('./src/controller/preferenceInfo.js');
+const newsInfo = require('./src/controller/newsController.js');
 
 const app = express();
 app.use(bodyParser.json());
@@ -26,6 +28,10 @@ try{
 app.post('/register', register);
 
 app.post('/signin', signin);
+
+app.use('/preferences', preferenceInfo);
+
+app.get('/news',newsInfo);
 
 app.listen(PORT, (error) => {
     if(!error){

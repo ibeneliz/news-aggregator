@@ -8,12 +8,14 @@ var register = (req, res) => {
     let email = req.body.email;
     let password = bcrypt.hashSync(req.body.password, 8);
     let role = req.body.role;
+    let preferences = req.body.preferences;
 
     const user = new User({
         fullName: fullName,
         email: email,
         password: password,
-        role: role
+        role: role,
+        preferences: preferences
     });
 
     user.save().then(data => {

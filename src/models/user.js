@@ -28,6 +28,10 @@ const userScheme = new Schema({
         type: String,
         required: true
       },
+      preferences: {
+        type: Object,
+        required: true
+      },
       created: {
         type: Date,
         default: Date.now

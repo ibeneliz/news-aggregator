@@ -3,6 +3,9 @@ const bodyParser = require('body-parser');
 const newsAPIPromise = require('../controller/newsHelper.js');
 const URLSearchparams = require('url-search-params');
 const verifyToken = require('../middleware/verifyToken.js');
+const NodeCache = require( "node-cache" );
+const myCache = new NodeCache();
+var User = require('../models/user.js');
 
 newsRoutes.use(bodyParser.json());
 
@@ -24,10 +27,16 @@ newsRoutes.get('/', verifyToken, async(req, res) => {
         let body = req.user.preferences;
         const searchParams3 = new URLSearchparams({apiKey: process.env.API_KEY});
         for(let i=0; i< body.length; i++){
-            const searchParams1 = new URLSearchparams({category: body[i].category});
-            const searchParams2 = new URLSearchparams({country: body[i].country});
-            const resp = await newsAPIPromise(`${url}?${searchParams1}&${searchParams2}&${searchParams3}`)
-            totalResults.push(resp);
+            let key = body[i].country + '-' + body[i].category;
+            if(myCache.get(key) == undefined){
+                const searchParams1 = new URLSearchparams({category: body[i].category});
+                const searchParams2 = new URLSearchparams({country: body[i].country});
+                const resp = await newsAPIPromise(`${url}?${searchParams1}&${searchParams2}&${searchParams3}`)
+                myCache.set(key, resp, 10000 );
+                totalResults.push(resp);
+            }else{
+                totalResults.push(myCache.get(key));
+            }
         }
         return res.status(200).send(totalResults);
     }catch(error){

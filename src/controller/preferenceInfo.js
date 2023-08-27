@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 var User = require('../models/user.js');
 var verifyToken = require('../middleware/verifyToken.js');
 const validator = require('../validator/validator.js');
+var cachedKeys = require('../models/cachedKeys.js');
 
 preferenceRoutes.use(bodyParser.json());
 
@@ -45,6 +46,17 @@ preferenceRoutes.post('/', verifyToken, (req, res) => {
                 console.log(err);
             }
         });
+        for(let i=0; i<req.body.preferences.length; i++){
+            let key = req.body.preferences[i].country + '-' + req.body.preferences[i].category;
+            const aKey = new cachedKeys({
+                articlekey: key
+            });
+            aKey.save().then(() => {
+                console.log("Key added successfully.");
+            }).catch(error => {
+                console.log("Error in adding key.",error);
+            });
+        }
         return res.status(200).send("Preference updated successfully.");
     } else {
         return res.status(400).json(isValid);

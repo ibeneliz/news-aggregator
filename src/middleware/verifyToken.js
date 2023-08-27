@@ -15,7 +15,8 @@ const verifyToken = (req, res, next) => {
                     req.user = user;
                     next();
                 }).catch(error => {
-                    return res.status(400).send(error);
+                    console.log("Error in access token",error);
+                    return res.status(401).send("You access token is either invalid or missing");
                 });
             }
         });

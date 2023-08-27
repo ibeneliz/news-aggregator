@@ -19,11 +19,6 @@ const userScheme = new Schema({
           message: '{VALUE} is not a valid email!'
         }
       },
-      role: {
-        type: String,
-        enum: ["normal", "admin"],
-        required: [true, "Please specify user role."]
-      },
       password: {
         type: String,
         required: true
@@ -32,9 +27,11 @@ const userScheme = new Schema({
         type: Object,
         required: true
       },
-      created: {
-        type: Date,
-        default: Date.now
+      favorite: {
+        type: Array
+      },
+      read: {
+        type: Array
       }
 });
 

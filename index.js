@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const routes = require('express').Router();
 const mongoose = require('mongoose');
-const {register, signin} = require('./src/controller/authController.js');
+const registerRoutes = require('./src/controller/registerController.js');
+const loginRoutes = require('./src/controller/loginController.js');
 const preferenceInfo = require('./src/controller/preferenceInfo.js');
 const newsInfo = require('./src/controller/newsController.js');
 const redisClient = require('./src/middleware/redis-cache.js');
@@ -35,9 +36,9 @@ try {
     console.log(error);
 }
 
-app.post('/register', register);
+app.use('/register', registerRoutes);
 
-app.post('/signin', signin);
+app.use('/signin', loginRoutes);
 
 app.use('/preferences', preferenceInfo);
 
